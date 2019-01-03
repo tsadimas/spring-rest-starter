@@ -7,3 +7,9 @@ target/
 .settings/
 .classpath
 .project
+
+#application properties
+*.properties
+
+# DS_Store
+.DS_Store
