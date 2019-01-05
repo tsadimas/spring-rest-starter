@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import gr.hua.dit.ds.springdemo.entity.Student;
 
 @RestController
-@RequestMapping("/api2")
+@RequestMapping("/api")
 public class StudentRestController {
 	
 	private List<Student> theStudents;
