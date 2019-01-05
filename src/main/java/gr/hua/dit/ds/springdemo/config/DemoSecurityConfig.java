@@ -5,6 +5,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -34,12 +35,19 @@ public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		// secures all REST endpoints under "/api/customers"
 		http.authorizeRequests()
-		.antMatchers("/api/customers/**").authenticated()
+		.antMatchers(HttpMethod.GET, "/api/customers").hasAnyRole("EMPLOYEE","ADMIN")
+		.antMatchers(HttpMethod.GET, "/api/customers/**").hasRole("EMPLOYEE")
+		.antMatchers(HttpMethod.POST, "/api/customers").hasAnyRole("MANAGER", "ADMIN")
+		.antMatchers(HttpMethod.POST, "/api/customers/**").hasAnyRole("MANAGER", "ADMIN")
+		.antMatchers(HttpMethod.PUT, "/api/customers").hasAnyRole("MANAGER", "ADMIN")
+		.antMatchers(HttpMethod.PUT, "/api/customers/**").hasAnyRole("MANAGER", "ADMIN")
+		.antMatchers(HttpMethod.DELETE, "/api/customers/**").hasRole("ADMIN")
 		.and()
 		.httpBasic()
 		.and()
 		.csrf().disable()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
 						
 		// Why disable CSRF?
 		//
