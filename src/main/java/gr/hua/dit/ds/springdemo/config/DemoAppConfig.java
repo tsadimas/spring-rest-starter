@@ -18,6 +18,7 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
@@ -103,6 +104,15 @@ public class DemoAppConfig implements WebMvcConfigurer {
 	@Bean
 	public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
 		return new PersistenceExceptionTranslationPostProcessor();
+	}
+	
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+	    registry.addResourceHandler("swagger-ui.html")
+	      .addResourceLocations("classpath:/META-INF/resources/");
+	 
+	    registry.addResourceHandler("/webjars/**")
+	      .addResourceLocations("classpath:/META-INF/resources/webjars/");
 	}
 
 }
