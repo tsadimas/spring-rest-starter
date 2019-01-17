@@ -70,13 +70,13 @@ public class TokenProvider implements Serializable  {
 
     UsernamePasswordAuthenticationToken getAuthentication(final String token, final Authentication existingAuth, final UserDetails userDetails) {
 
-        final JwtParser jwtParser = Jwts.parser().setSigningKey(SIGNING_KEY);
+    	final JwtParser jwtParser = Jwts.parser().setSigningKey(SIGNING_KEY);
 
-        final Jws claimsJws = jwtParser.parseClaimsJws(token);
+        final Jws<Claims> claimsJws = jwtParser.parseClaimsJws(token);
 
-        final Claims claims = (Claims) claimsJws.getBody();
+        final Claims claims = claimsJws.getBody();
 
-        final Collection authorities =
+        final Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());

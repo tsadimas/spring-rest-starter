@@ -1,10 +1,14 @@
 package gr.hua.dit.ds.springdemo.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import gr.hua.dit.ds.springdemo.dao.UserDAO;
+import gr.hua.dit.ds.springdemo.entity.Authorities;
 import gr.hua.dit.ds.springdemo.entity.User;
 
 @Service(value = "userService")
@@ -32,17 +37,17 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getAuthority(user));
 	}
 
-	private Set getAuthority(User user) {
-        Set authorities = new HashSet<>();
-		user.getAuthorities().forEach(role -> {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getAuthority()));
-		});
-		return authorities;
-	}
-
-
 	
 
+	private Set<SimpleGrantedAuthority> getAuthority(User user) {
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+		user.getAuthorities().forEach(role -> {
+			//authorities.add(new SimpleGrantedAuthority(role.getName()));
+            authorities.add(new SimpleGrantedAuthority(role.getAuthority()));
+		});
+		return authorities;
+		//return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+	}
 	@Override
 	public User findOne(String username) {
 		return userDao.findUserByUsername(username);
